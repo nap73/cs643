@@ -13,11 +13,11 @@ from prettytable import PrettyTable
 
 sc = SparkContext()
 spark = SparkSession(sc)
-inputDF = spark.read.csv('s3://mycs643/ValidationDataset.csv',header='true', inferSchema='true', sep=';')
+inputDF = spark.read.csv('s3://bucket_name/ValidationDataset.csv',header='true', inferSchema='true', sep=';')
 
 
 datadf= inputDF.rdd.map(lambda row: LabeledPoint(row[-1], Vectors.dense(row[0:-1])))
-model = RandomForestModel.load(sc,"s3://mycs643/modrf.model")
+model = RandomForestModel.load(sc,"s3://bucket_name/modrf.model")
 
 predictions = model.predict(datadf.map(lambda x: x.features))
 
